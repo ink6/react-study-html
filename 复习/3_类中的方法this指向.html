@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    class Person {
+      constructor(name, age) {
+        this.name = name
+        this.age = age
+      }
+      // 一般方法
+      speak() {
+        // speak方法放在了哪里？ -- 类的原型对象上，供类的实例使用
+        // 通过Person实例调用speak时，speak中的this就是Person实例 （只有后半段'speak中的this就是Person实例 '的错误的 ， 比如 p1.speak.call({a:1})）
+        console.log(this);
+      }
+    }
+    const p1 = new Person('薛文婷', 8)
+    p1.speak()
+    const x1 = p1.speak
+    console.log(x1);
+    /*
+    ƒ speak() {
+        // speak方法放在了哪里？ -- 类的原型对象上，供类的实例使用
+        // 通过Person实例调用speak时，speak中的this就是Person实例 （只有后半段'speak中的this就是Person实例 '的错误的 ， 比如 p1.speak.call({a:1})）
+        console.log(this);
+    }*/
+    x1() // this是undefined 因为类中局部定义的方法speak开启了严格模式
+    console.log('--------------------------');
+    function Demo() {
+      'use strict'
+      console.log(this);
+    }
+    function Demo2() {
+      console.log(this);
+    }
+    Demo()
+    Demo2()
+  </script>
+</body>
+</html>

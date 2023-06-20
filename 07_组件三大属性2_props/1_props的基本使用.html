@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1_props的基本使用</title>
+</head>
+<body>
+  <div id="app1"></div>
+  <hr>
+  <div id="app2"></div>
+  <hr>
+  <div id="app3"></div>
+  <script src="./../js/react.development.js"></script>
+  <script src="./../js/react-dom.development.js"></script>
+  <script src="./../js/babel.min.js"></script>
+  <script type="text/babel">
+    class MyComponents extends React.Component {
+      render() {
+        console.log(this);
+        const { name, age, looks} = this.props
+        return (
+          <ul>
+            <li>姓名：{ name }</li>
+            <li>年龄：{ age }</li>
+            <li>长相：{ looks }</li>
+          </ul>
+        )
+      }
+    }
+    const person = { name: '薛雯婷', age: 18, looks: '美丽'}
+
+    // !!!! 这里{...person}的写法并不是 对象包裹了{}复制了一个对象
+    // 而是：{} -> react的插值语法规范 + JS表达式， 而对象是不允许用拓展运算符进行解构的（见复习-4展开运算符）这里能够使用是因为 react+babel 进行了处理从而可以使用展开运算符展开了一个对象（...person）
+    ReactDOM.render(<MyComponents {...person} />, document.getElementById('app1'))
+    console.log('----', ...person); // react+babel只允许对标签属性使用展开运算符展开一个对象，所以这里的打印是空
+    ReactDOM.render(<MyComponents name="袁敏" age={ 16 } looks="大方" />, document.getElementById('app2'))
+    ReactDOM.render(<MyComponents name="温蒂" age={ 6 } looks="帅气" />, document.getElementById('app3'))
+  </script>
+</body>
+</html>

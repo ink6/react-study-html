@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>state的简写方式</title>
+</head>
+<body>
+  <!-- 容器 -->
+  <div id="app"></div>
+  <script src="./../js/react.development.js"></script>
+  <script src="./../js/react-dom.development.js"></script>
+  <script src="./../js/babel.min.js"></script>
+  <script type="text/babel">
+    // 1、创建类式组件
+    class Weather extends React.Component{
+      // 初始化状态
+      state = { isHot: true }
+      // 自定义方法 - 要用赋值语句 + 箭头函数（修改this）的形式
+      switchWeather = () => {
+        this.setState({
+          isHot: !this.state.isHot
+        })
+      }
+      render() {
+        const { isHot } = this.state
+        return <h1 onClick={ this.switchWeather }>天气很{ isHot? '炎热': '寒冷' }</h1>
+      }
+    }
+    // 2、渲染组件到页面
+    ReactDOM.render(<Weather />, document.getElementById('app'))
+  </script>
+</body>
+</html>

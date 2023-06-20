@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生命周期(新)</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="./../js/17.0.1/react.development.js"></script>
+  <script src="./../js/17.0.1/react-dom.development.js"></script>
+  <script src="./../js/17.0.1/babel.min.js"></script>
+  <script type="text/babel">
+    // 创建组件
+    class Count extends React.Component {
+      constructor(props) {
+        console.log('constructor - count');
+        super(props)
+        this.state = { count: 1 }
+      }
+      // 更新state
+      add = () => {
+        this.setState({
+          count: this.state.count + 1
+        })
+      }
+      // 卸载钩子的回调
+      death = () => {
+        ReactDOM.unmountComponentAtNode(document.getElementById('app'))
+      }
+      // 强制更新组件钩子的回调
+      force = () => {
+        this.forceUpdate()
+      }
+      // 组件即将挂载的时候
+      UNSAFE_componentWillMount() {
+        console.log('componentWillMount - count');
+      }
+      // 组件实例挂载之后
+      componentDidMount() {
+        console.log('componentDidMount - count');
+      }
+      // 控制组件更新的阀门 setstate 会调用
+      shouldComponentUpdate() {
+        console.log('shouldComponentUpdate - count');
+        return false
+      }
+      // 组件将要更新的钩子
+      UNSAFE_componentWillUpdate () {
+        console.log('componentWillUpdate - count');
+      }
+      // 组件更新完毕的钩子
+      componentDidUpdate () {
+        console.log('componentDidUpdate - count');
+      }
+      // 组件卸载
+      componentWillUnmount() {
+        console.log('componentWillUnmount - count');
+      }
+      // 组件初始化渲染、状态更新之后
+      render() {
+        console.log('render - count');
+        return (
+          <div>
+            <h3>当前求和为: {this.state.count}</h3>  
+            <button onClick={ this.add }> + 1</button> <br />
+            <button onClick={ this.death }>卸载组件</button>
+            <button onClick={ this.force }>不更改任何状态中的数据，强制更新一下</button>
+          </div>
+        )
+      }
+    }
+    // 父组件A
+    class A extends React.Component {
+      state  = { carName: '奔驰' }
+      changeCar = () => {
+        this.setState({
+          carName: '宾利'
+        })
+      }
+      render() {
+        return (
+          <div>
+            A
+            <button onClick={this.changeCar}>换车</button>
+            <B carName={ this.state.carName } />
+          </div>
+        )
+      }
+    }
+    // 子组件B
+    class B extends React.Component {
+      // 组件将要接受新的props的钩子 第一次传递props不会进入，之后会进入
+      UNSAFE_componentWillReceiveProps (props) {
+        console.log('componentWillReceiveProps - B', props);
+      }
+      render() {
+        console.log('render - B');
+        return (
+          <div>
+            车信息： {this.props.carName}
+          </div>
+        )
+      }
+    }
+    ReactDOM.render(<A/>, document.getElementById('app'))
+    // ReactDOM.render(<Count/>, document.getElementById('app'))
+
+  </script>
+</body>
+</html>

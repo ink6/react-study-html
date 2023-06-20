@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生命周期(旧)</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="./../js/react.development.js"></script>
+  <script src="./../js/react-dom.development.js"></script>
+  <script src="./../js/babel.min.js"></script>
+  <script type="text/babel">
+    /**
+     * 生命周期
+     *  挂载时 ： constructor -> componentWillMount -> render -> componentDidMount
+     *  setState时： shouldComponentUpdate -> componentWillUpdate -> render -> componentDidUpdate
+     *  forceUpdate时： componentWillUpdate -> render -> componentDidUpdate
+     *  父组件：componentWillReceiveProps -> shouldComponentUpdate -> componentWillUpdate -> render -> componentDidUpdate
+     */
+    /*
+      1、初始化阶段: 由ReactDOM.render()触发---初次渲染
+        constructor()
+        componentwillMount()
+        render()
+        componentDidMount() ====> 常用 一般在这个钩子里做初始化的事 ，eg.开启定时器 发生网络请求 订阅消息
+      2、更新阶段: 由组件内部this.setSate()或父组件重新render触发
+        shouldComponentUpdate()
+        componentWillUpdate()
+        render() ====> 必须使用的一个
+        componentDidUpdate()
+      3、卸载组件:由ReactDOM.unmountComponentAtNode()触发
+        componentWillUnmount() ====> 常用 一般在这个钩子里做收尾的事 ，eg.关闭定时器 取消订阅消息
+    */
+     
+    // 创建组件
+    class Count extends React.Component {
+      constructor(props) {
+        console.log('constructor - count');
+        super(props)
+        this.state = { count: 0 }
+      }
+      // 更新state
+      add = () => {
+        const { count } = this.state
+        this.setState({
+          count: count + 1
+        })
+      }
+      // 卸载钩子的回调
+      death = () => {
+        ReactDOM.unmountComponentAtNode(document.getElementById('app'))
+      }
+      // 强制更新组件钩子的回调
+      force = () => {
+        this.forceUpdate()
+      }
+      // 组件即将挂载的时候
+      componentWillMount() {
+        console.log('componentWillMount - count');
+      }
+      // 组件实例挂载之后
+      componentDidMount() {
+        console.log('componentDidMount - count');
+      }
+      // 控制组件更新的阀门 setstate 会调用
+      shouldComponentUpdate() {
+        console.log('shouldComponentUpdate - count');
+        return true
+      }
+      // 组件将要更新的钩子
+      componentWillUpdate () {
+        console.log('componentWillUpdate - count');
+      }
+      // 组件更新完毕的钩子
+      componentDidUpdate () {
+        console.log('componentDidUpdate - count');
+      }
+      // 组件卸载
+      componentWillUnmount() {
+        console.log('componentWillUnmount - count');
+      }
+      // 组件初始化渲染、状态更新之后
+      render() {
+        console.log('render - count');
+        return (
+          <div>
+            <h3>当前求和为: {this.state.count }</h3>  
+            <button onClick={ this.add }> + 1</button> <br />
+            <button onClick={ this.death }>卸载组件</button>
+            <button onClick={ this.force }>不更改任何状态中的数据，强制更新一下</button>
+          </div>
+        )
+      }
+    }
+    // 父组件A
+    class A extends React.Component {
+      state  = { carName: '奔驰' }
+      changeCar = () => {
+        this.setState({
+          carName: '宾利'
+        })
+      }
+      render() {
+        return (
+          <div>
+            A
+            <button onClick={this.changeCar}>换车</button>
+            <B carName={ this.state.carName } />
+          </div>
+        )
+      }
+    }
+    // 子组件B
+    class B extends React.Component {
+      // 组件将要接受新的props的钩子 第一次传递props不会进入，之后会进入
+      componentWillReceiveProps (props) {
+        console.log('componentWillReceiveProps - B', props);
+      }
+      shouldComponentUpdate() {
+        console.log('shouldComponentUpdate -B');
+        return true
+      }
+      componentWillUpdate() {
+        console.log('componentWillUpdate -B');
+      }
+      componentDidUpdate() {
+        console.log('componentDidUpdate -B');
+      }
+      render() {
+        console.log('render - B');
+        return (
+          <div>
+            车信息： {this.props.carName}
+          </div>
+        )
+      }
+    }
+    // ReactDOM.render(<A/>, document.getElementById('app'))
+    ReactDOM.render(<Count/>, document.getElementById('app'))
+
+  </script>
+</body>
+</html>

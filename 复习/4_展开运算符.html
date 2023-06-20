@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    const arr1 = [1, 3, 5, 7, 9]
+    const arr2 = [2, 4, 6, 8, 10]
+    console.log(...arr1); // 展开数组
+    const arr3 = [...arr1, ...arr2] //链接数组
+    console.log(arr3);
+
+    // 在函数中使用
+    function sum(...numbers) {
+      console.log('源数据：', numbers); // 函数 通过...接受数据 结果是个数组
+      // reduce() 方法对数组中的每个元素按序执行一个提供的 reducer 函数，每一次运行 reducer 会将先前元素的计算结果作为参数传入，最后将其结果汇总为单个返回值。
+      return numbers.reduce((accumulator, currentValue, index) => {
+        console.log('上一次调用callback的返回结果accumulator:', accumulator);
+        console.log('当前元素的值currentValue:', currentValue);
+        console.log('currentValue 在数组中的索引位置:', index);
+        console.log('----------------------------------------');
+        return accumulator + currentValue
+      })
+    }
+    sum(1, 2, 3, 4, 5, 6, 7, 8)
+
+    const obj1 = { name: 'TOM', age: 18 }
+    // 展开运算符不可以展开一个对象
+    // console.log(...obj1); // error: Spread syntax requires ...iterable[Symbol.iterator] to be a function
+
+    // 构造字面量时使用展开语法
+    const obj2 = { ...obj1 } // 直接...obj1 不可以展开一个对象 但是包裹了{}可以复制一个对象
+    obj1.name="JACK"
+    console.log({...obj1});
+    console.log(obj2);
+
+    // 复制对象的同时修改属性
+    let obj3 = {
+      ...obj1,
+      name: 'SHABI'
+    }
+  </script>
+</body>
+</html>

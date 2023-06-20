@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2_对props进行限制</title>
+</head>
+<body>
+  <div id="app1"></div>
+  <hr>
+  <div id="app2"></div>
+  <hr>
+  <div id="app3"></div>
+  <script src="./../js/react.development.js"></script>
+  <script src="./../js/react-dom.development.js"></script>
+  <script src="./../js/babel.min.js"></script>
+  <!-- 引入prop-types 用于对组件标签属性进行限制： 全局对象PropTypes -->
+  <script src="./../js/prop-types.js"></script>
+  <script type="text/babel">
+    class MyComponents extends React.Component {
+      render() {
+        console.log(this);
+        const { name, age, looks } = this.props
+        // this.props.name = 'jack' // ！！props是只读的 Cannot assign to read only property 'name' of object '#<Object>'
+        return (
+          <ul>
+            <li>姓名：{ name }</li>
+            <li>年龄：{ age + 1 }</li>
+            <li>长相：{ looks }</li>
+          </ul>
+        )
+      }
+    }
+    MyComponents.propTypes = {
+      name: PropTypes.string.isRequired, // 限制name 必填 字符型
+      age: PropTypes.number, // 数值型
+      name: PropTypes.string, //字符型
+      speak: PropTypes.func // 函数得写func
+      // name: React.PropTypes.string // react 15版本的内容， 16之后被弃用
+    }
+    MyComponents.defaultProps = { // 默认值
+      name: "默认姓名",
+      age: 18
+    }
+    const person = { name: '薛雯婷', age: 18, looks: '美丽'}
+    ReactDOM.render(<MyComponents {...person} />, document.getElementById('app1'))
+    ReactDOM.render(<MyComponents name="袁敏" age={ 16 } looks="大方" />, document.getElementById('app2'))
+    ReactDOM.render(<MyComponents age={ 6 } speak={ speak } looks="帅气" />, document.getElementById('app3'))
+    function speak () {
+      alert('say')
+    }
+  </script>
+</body>
+</html>

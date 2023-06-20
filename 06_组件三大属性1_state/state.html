@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>state</title>
+</head>
+<body>
+  <!-- 容器 -->
+  <div id="app"></div>
+  <script src="./../js/react.development.js"></script>
+  <script src="./../js/react-dom.development.js"></script>
+  <script src="./../js/babel.min.js"></script>
+  <script type="text/babel">
+    // 1、创建类式组件
+    class Weather extends React.Component{
+      // 构造器调用几次？ -- 一次
+      constructor(props) {
+        super(props)
+        // 初始化状态
+        this.state = { // constructor中的this是组件实例对象
+          isHot: true
+        }
+        // 方法一 解决switchWeather中的this问题
+        this.switchWeatherLast = this.switchWeather.call(this)
+      }
+      // switchWeather调用几次？ -- 点几次调用几次
+      switchWeather() {
+        // switchWeather 放在哪里？ -- Weather的原型对象上，供实例使用
+        // 由于switchWeather是作为onClick的回调，所以不是通过实例调用的，是直接调用
+        // 类中的方法默认开启了局部的严格模式 所以switchWeather中的this是undefined
+        console.log(this); // 没在constructor中 this.switchWeatherLast = this.switchWeather.call(this)之前，this是undefined
+        // 状态必须通过setState来进行变更，且更新是一种合并操作，不是替换
+        this.setState({
+          isHot: !this.state.isHot
+        })
+        // !!!! 状态（state）不可直接更改，下面就是直接更改 不可取！！
+        // this.state.isHot = !this.state.isHot
+      }
+      //  方法二
+      // switchWeather = () => {
+      //   console.log(this);
+      //   // this.state.isHot = !this.state.isHot
+      //   this.setState({
+      //     isHot: !this.state.isHot
+      //   })
+      // }
+      // render调用几次？ -- 1+n次 -> 1是初始化那次，n是状态更新的次数
+      render() {
+        // render中的this是组件实例对象 =》 ReactDOM.render执行的时候，发现组件是使用类定义的，随后new出该类的实例new MyComponent(),并通过该实例调用到原型上的render()方法
+        console.log(this.state.isHot);
+        const { isHot } = this.state
+        return <h1 onClick={ this.switchWeatherLast }>天气很{ isHot? '炎热': '寒冷' }</h1>
+        // return <h1 onClick={ this.switchWeather }>天气很{ isHot? '炎热': '寒冷' }</h1>
+      }
+    }
+    // 2、渲染组件到页面
+    ReactDOM.render(<Weather />, document.getElementById('app'))
+  </script>
+</body>
+</html>
