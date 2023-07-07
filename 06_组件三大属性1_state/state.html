@@ -30,7 +30,7 @@
         // switchWeather 放在哪里？ -- Weather的原型对象上，供实例使用
         // 由于switchWeather是作为onClick的回调，所以不是通过实例调用的，是直接调用
         // 类中的方法默认开启了局部的严格模式 所以switchWeather中的this是undefined
-        console.log(this); // 没在constructor中 this.switchWeatherLast = this.switchWeather.call(this)之前，this是undefined
+        console.log(this); // 没在constructor中写this.switchWeatherLast = this.switchWeather.call(this)之前，this是undefined
         // 状态必须通过setState来进行变更，且更新是一种合并操作，不是替换
         this.setState({
           isHot: !this.state.isHot
@@ -38,7 +38,7 @@
         // !!!! 状态（state）不可直接更改，下面就是直接更改 不可取！！
         // this.state.isHot = !this.state.isHot
       }
-      //  方法二
+      //  方法二 使用箭头函数 将switchWeather中this指向外层的this
       // switchWeather = () => {
       //   console.log(this);
       //   // this.state.isHot = !this.state.isHot

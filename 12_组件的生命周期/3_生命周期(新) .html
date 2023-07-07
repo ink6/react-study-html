@@ -28,13 +28,27 @@
         3、render()
         4、getSnapshotBeforeUpdate
         5、componentDidUpdate()
-      3、卸载组件:llIReactDOM.unmountComponentAtNode()触发
+      3、卸载组件: ReactDOM.unmountComponentAtNode()触发
         componentWillUnmount()
     */
+
+    /*
+      父子更新
+      getDerivedStateFromProps - countFather {count: '999'} {count: 2}
+      shouldComponentUpdate - countFather
+      render - countFather
+      getDerivedStateFromProps - count {} {count: 1}
+      shouldComponentUpdate - count
+      render - count
+      getSnapshotBeforeUpdate - count
+      getSnapshotBeforeUpdate - countFather
+      componentDidUpdate - count
+      componentDidUpdate - countFather
+    */
     // 创建组件
-    class Count extends React.Component {
+    class CountFather extends React.Component {
       constructor(props) {
-        console.log('constructor - count');
+        console.log('constructor - countFather');
         super(props)
         this.state = { count: 1 }
       }
@@ -54,48 +68,85 @@
       }
       // state的值在任何时候都取决于props 的时候 使用
       static getDerivedStateFromProps(props, state) { // 此方法适用于 罕见的用例， 即 state的值在任何时候都取决于props
-        console.log('getDerivedStateFromProps - count', props, state);
+        console.log('getDerivedStateFromProps - countFather', props, state);
         return null
         // return { count: 666 }
         // return props
       }
       // 在更新之前使用快照
       getSnapshotBeforeUpdate() {
-        console.log('getSnapshotBeforeUpdate - count');
+        console.log('getSnapshotBeforeUpdate - countFather');
         // return 1
         return '我要传给componentDidUpdate'
       }
       // 组件实例挂载之后
       componentDidMount() {
-        console.log('componentDidMount - count');
+        console.log('componentDidMount - countFather');
       }
       // 控制组件更新的阀门 setstate 会调用
       shouldComponentUpdate() {
-        console.log('shouldComponentUpdate - count');
+        console.log('shouldComponentUpdate - countFather');
         return true
       }
       // 组件更新完毕的钩子 preProps - 之前的props preState-之前的状态
       componentDidUpdate (prevProps, prevState, params) {
-        console.log('componentDidUpdate - count', prevProps, prevState, params);
+        console.log('componentDidUpdate - countFather', prevProps, prevState, params);
       }
       // 组件卸载
       componentWillUnmount() {
-        console.log('componentWillUnmount - count');
+        console.log('componentWillUnmount - countFather');
       }
       // 组件初始化渲染、状态更新之后
       render() {
-        console.log('render - count');
+        console.log('render - countFather');
         return (
           <div>
             <h3>当前求和为: {this.state.count}</h3>  
             <button onClick={ this.add }> + 1</button> <br />
             <button onClick={ this.death }>卸载组件</button>
             <button onClick={ this.force }>不更改任何状态中的数据，强制更新一下</button>
+            <Count/>
           </div>
         )
       }
     }
-    ReactDOM.render(<Count count="999"/>, document.getElementById('app'))
+    class Count extends React.Component {
+      constructor(props) {
+        super(props)
+        this.state = { count: 1 }
+        console.log('constructor - count');
+      }
+      // static getDerivedStateFromProps(props, state) {
+      //   console.log('getDerivedStateFromProps - count', props, state);
+      //   return null
+      // }
+      // state的值在任何时候都取决于props 的时候 使用
+      static getDerivedStateFromProps(props, state) { // 此方法适用于 罕见的用例， 即 state的值在任何时候都取决于props
+        console.log('getDerivedStateFromProps - count', props, state);
+        return null
+      }
+      componentDidMount() {
+        console.log('componentDidMount - count');
+      }
+      shouldComponentUpdate() {
+        console.log('shouldComponentUpdate - count');
+        return true
+      }
+      getSnapshotBeforeUpdate() {
+        console.log('getSnapshotBeforeUpdate - count');
+        return '好烦啊 非要return一个值给didupdate'
+      }
+      componentDidUpdate () {
+        console.log('componentDidUpdate - count');
+      }
+      render() {
+        console.log('render - count');
+        return (
+          <h2>子</h2>
+        )
+      }
+    }
+    ReactDOM.render(<CountFather count="999"/>, document.getElementById('app'))
 
   </script>
 </body>

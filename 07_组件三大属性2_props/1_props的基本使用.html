@@ -33,7 +33,7 @@
     // !!!! 这里{...person}的写法并不是 对象包裹了{}复制了一个对象
     // 而是：{} -> react的插值语法规范 + JS表达式， 而对象是不允许用拓展运算符进行解构的（见复习-4展开运算符）这里能够使用是因为 react+babel 进行了处理从而可以使用展开运算符展开了一个对象（...person）
     ReactDOM.render(<MyComponents {...person} />, document.getElementById('app1'))
-    console.log('----', ...person); // react+babel只允许对标签属性使用展开运算符展开一个对象，所以这里的打印是空
+    console.log('----', ...person); // react+babel只允许对标签属性使用展开运算符展开一个对象，对于非标签属性不予处理，所以这里的打印是空
     ReactDOM.render(<MyComponents name="袁敏" age={ 16 } looks="大方" />, document.getElementById('app2'))
     ReactDOM.render(<MyComponents name="温蒂" age={ 6 } looks="帅气" />, document.getElementById('app3'))
   </script>

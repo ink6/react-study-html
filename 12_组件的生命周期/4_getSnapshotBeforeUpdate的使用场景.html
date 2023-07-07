@@ -38,7 +38,7 @@
         return height
       }
       componentDidUpdate (prevProps, prevState, height) {
-        this.list.scrollTop += this.list.scrollHeight - height // 这里不写 = 写+= 是因为滚动的高度需要加上生意场的滚动值
+        this.list.scrollTop += this.list.scrollHeight - height // 这里不写 = 写+= 是因为滚动的高度需要加上上一次的滚动值
       }
       // 组件初始化渲染、状态更新之后
       render() {

@@ -25,7 +25,7 @@
       // 一般方法
       speak() {
         // speak方法放在了哪里？ -- 类的原型对象上，供类的实例使用
-        // 通过Person实例调用speak时，speak中的this就是Person实例 （只有后半段'speak中的this就是Person实例 '的错误的 ， 比如 p1.speak.call({a:1})的this就是{a:1}本身）
+        // 通过Person实例调用speak时，speak中的this就是Person实例 （这句话只有后半段'speak中的this就是Person实例 '的错误的 ， 比如 p1.speak.call({a:1})的this就是{a:1}本身）
         console.log(this);
         console.log(`我叫${this.name},我今年${this.age}岁了`);
       }

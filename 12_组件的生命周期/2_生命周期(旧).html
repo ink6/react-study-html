@@ -101,7 +101,24 @@
           carName: '宾利'
         })
       }
+      componentWillReceiveProps (props) {
+        console.log('componentWillReceiveProps - A', props);
+      }
+      // 控制组件更新的阀门 setstate 会调用
+      shouldComponentUpdate() {
+        console.log('shouldComponentUpdate - A');
+        return true
+      }
+      // 组件将要更新的钩子
+      componentWillUpdate () {
+        console.log('componentWillUpdate - A');
+      }
+      // 组件更新完毕的钩子
+      componentDidUpdate () {
+        console.log('componentDidUpdate - A');
+      }
       render() {
+        console.log('render - A');
         return (
           <div>
             A
@@ -136,8 +153,8 @@
         )
       }
     }
-    // ReactDOM.render(<A/>, document.getElementById('app'))
-    ReactDOM.render(<Count/>, document.getElementById('app'))
+    ReactDOM.render(<A/>, document.getElementById('app'))
+    // ReactDOM.render(<Count/>, document.getElementById('app'))
 
   </script>
 </body>
