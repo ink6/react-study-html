@@ -28,7 +28,7 @@
       // switchWeather调用几次？ -- 点几次调用几次
       switchWeather() {
         // switchWeather 放在哪里？ -- Weather的原型对象上，供实例使用
-        // 由于switchWeather是作为onClick的回调，所以不是通过实例调用的，是直接调用
+        // 但由于switchWeather是作为onClick的回调，所以不是通过实例调用的，是直接调用
         // 类中的方法默认开启了局部的严格模式 所以switchWeather中的this是undefined
         console.log(this); // 没在constructor中写this.switchWeatherLast = this.switchWeather.call(this)之前，this是undefined
         // 状态必须通过setState来进行变更，且更新是一种合并操作，不是替换
